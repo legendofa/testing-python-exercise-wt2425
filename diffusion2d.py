@@ -50,7 +50,7 @@ class SolveDiffusion2D:
         self.nx = int(w / dx)
         self.ny = int(h / dy)
 
-    def initialize_physical_parameters(self, d=4., T_cold=300., T_hot=700.):
+    def initialize_physical_parameters(self, d=4., T_cold=300., T_hot=700.0):
         assert type(d) == float, "Thermal diffusivity must be a float"
         assert type(T_cold) == float, "Cold temperature must be a float"
         assert type(T_hot) == float, "Hot temperature must be a float"
@@ -66,7 +66,7 @@ class SolveDiffusion2D:
         print("dt = {}".format(self.dt))
 
     def set_initial_condition(self):
-        u = self.T_cold * np.ones((self.nx, self.ny))
+        u = self.T_hot * np.ones((self.nx, self.ny))
 
         # Initial conditions - circle of radius r centred at (cx,cy) (mm)
         r, cx, cy = 2, 5, 5
