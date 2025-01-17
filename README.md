@@ -120,22 +120,17 @@ FAILED tests/unit/test_diffusion2d_functions.py::test_initialize_physical_parame
 Initialization with T_hot instead of T_cold:
 
 ```
-============================= test session starts ==============================
+=================== test session starts ===================
 platform linux -- Python 3.12.8, pytest-8.3.3, pluggy-1.5.0
 rootdir: /home/julian/Documents/git/testing-python-exercise-wt2425
 collected 3 items
 
-tests/unit/test_diffusion2d_functions.py .dt = 0.015625
-.[[700. 700. 700. 700. 700. 700.]
- [700. 700. 700. 700. 700. 700.]
- [700. 700. 700. 700. 700. 700.]
- [700. 700. 700. 700. 700. 700.]]
-F
+tests/unit/test_diffusion2d_functions.py ..F        [100%]
 
-=================================== FAILURES ===================================
-__________________________ test_set_initial_condition __________________________
+======================== FAILURES =========================
+_______________ test_set_initial_condition ________________
 
-solver = <diffusion2d.SolveDiffusion2D object at 0x7efd126da810>
+solver = <diffusion2d.SolveDiffusion2D object at 0x7f7c3aecdc40>
 
     def test_set_initial_condition(solver):
         """
@@ -154,26 +149,33 @@ solver = <diffusion2d.SolveDiffusion2D object at 0x7efd126da810>
         u = solver.set_initial_condition()
         print(u)
         assert u.shape == (4, 6)
->       assert numpy.array_equal(u,
-            numpy.array(
+>       assert numpy.allclose(a=u,
+            b=numpy.array(
                 [
                     [300., 300., 300., 300., 300., 300.],
                     [300., 300., 300., 300., 300., 300.],
                     [300., 300., 300., 300., 300., 300.],
                     [300., 300., 300., 300., 300., 300.]
                 ]
-            )
+            ),
+            atol=1e-3,
+            rtol=0,
         )
 E       assert False
-E        +  where False = <function array_equal at 0x7efd1481fd30>(array([[700., 700., 700., 700., 700., 700.],\n       [700., 700., 700., 700., 700., 700.],\n       [700., 700., 700., 700., 700., 700.],\n       [700., 700., 700., 700., 700., 700.]]), array([[300., 300., 300., 300., 300., 300.],\n       [300., 300., 300., 300., 300., 300.],\n       [300., 300., 300., 300., 300., 300.],\n       [300., 300., 300., 300., 300., 300.]]))
-E        +    where <function array_equal at 0x7efd1481fd30> = numpy.array_equal
+E        +  where False = <function allclose at 0x7f7c08620070>(a=array([[700., 700., 700., 700., 700., 700.],\n       [700., 700., 700., 700., 700., 700.],\n       [700., 700., 700., 700., 700., 700.],\n       [700., 700., 700., 700., 700., 700.]]), b=array([[300., 300., 300., 300., 300., 300.],\n       [300., 300., 300., 300., 300., 300.],\n       [300., 300., 300., 300., 300., 300.],\n       [300., 300., 300., 300., 300., 300.]]), atol=0.001, rtol=0)
+E        +    where <function allclose at 0x7f7c08620070> = numpy.allclose
 E        +    and   array([[300., 300., 300., 300., 300., 300.],\n       [300., 300., 300., 300., 300., 300.],\n       [300., 300., 300., 300., 300., 300.],\n       [300., 300., 300., 300., 300., 300.]]) = <built-in function array>([[300.0, 300.0, 300.0, 300.0, 300.0, 300.0], [300.0, 300.0, 300.0, 300.0, 300.0, 300.0], [300.0, 300.0, 300.0, 300.0, 300.0, 300.0], [300.0, 300.0, 300.0, 300.0, 300.0, 300.0]])
 E        +      where <built-in function array> = numpy.array
 
 tests/unit/test_diffusion2d_functions.py:70: AssertionError
-=========================== short test summary info ============================
-FAILED tests/unit/test_diffusion2d_functions.py::test_set_initial_condition
-========================= 1 failed, 2 passed in 0.70s ==========================
+------------------ Captured stdout call -------------------
+[[700. 700. 700. 700. 700. 700.]
+ [700. 700. 700. 700. 700. 700.]
+ [700. 700. 700. 700. 700. 700.]
+ [700. 700. 700. 700. 700. 700.]]
+================= short test summary info =================
+FAILED tests/unit/test_diffusion2d_functions.py::test_set_initial_condition - assert False
+=============== 1 failed, 2 passed in 0.41s ===============
 ```
 
 ### unittest log
