@@ -7,17 +7,17 @@ Please follow the instructions in [python_testing_exercise.md](https://github.co
 ### pytest log
 
 ```
-============================= test session starts ==============================
+======================= test session starts =======================
 platform linux -- Python 3.12.8, pytest-8.3.3, pluggy-1.5.0
 rootdir: /home/julian/Documents/git/testing-python-exercise-wt2425
 collected 3 items
 
-tests/unit/test_diffusion2d_functions.py F.F                             [100%]
+tests/unit/test_diffusion2d_functions.py F..                [100%]
 
-=================================== FAILURES ===================================
-____________________________ test_initialize_domain ____________________________
+============================ FAILURES =============================
+_____________________ test_initialize_domain ______________________
 
-solver = <diffusion2d.SolveDiffusion2D object at 0x7f48baf5aae0>
+solver = <diffusion2d.SolveDiffusion2D object at 0x7fb625562900>
 
     def test_initialize_domain(solver):
         """
@@ -35,55 +35,26 @@ E         comparison failed
 E         Obtained: 60
 E         Expected: 40 ± 1.0e-02
 
-tests/unit/test_diffusion2d_functions.py:22: AssertionError
-__________________________ test_set_initial_condition __________________________
-
-solver = <diffusion2d.SolveDiffusion2D object at 0x7f48baf5a960>
-
-    def test_set_initial_condition(solver):
-        """
-        Checks function SolveDiffusion2D.get_initial_function
-        """
-        d = 4.
-        T_cold = 300.
-        T_hot = 700.
-        w = 20.
-        h = 30.
-        dx = 0.5
-        dy = 0.5
-        solver.initialize_domain(w, h, dx, dy)
-        solver.initialize_physical_parameters(d, T_cold, T_hot)
-        u = solver.set_initial_condition()
->       assert u.shape == (40, 60)
-E       assert (60, 60) == (40, 60)
-E
-E         At index 0 diff: 60 != 40
-E         Use -v to get more diff
-
-tests/unit/test_diffusion2d_functions.py:61: AssertionError
------------------------------ Captured stdout call -----------------------------
-dt = 0.015625
-=========================== short test summary info ============================
-FAILED tests/unit/test_diffusion2d_functions.py::test_initialize_domain - ass...
-FAILED tests/unit/test_diffusion2d_functions.py::test_set_initial_condition
-========================= 2 failed, 3 passed in 0.73s ==========================
+tests/unit/test_diffusion2d_functions.py:25: AssertionError
+===================== short test summary info =====================
+FAILED tests/unit/test_diffusion2d_functions.py::test_initialize_domain - assert 60 == 40 ± 1.0e-02
+=================== 1 failed, 2 passed in 0.41s ===================
 ```
 
-Changed factor `2` to `4` in formula: `self.dt = dx2 * dy2 / (4 * self.D * (dx2 + dy2))`
+Changed factor `2` to `4` in formula: `self.dt = dx2 * dy2 / (4 * self.D * (dx2 + dy2))`:
 
 ```
 ============================= test session starts ==============================
 platform linux -- Python 3.12.8, pytest-8.3.3, pluggy-1.5.0
 rootdir: /home/julian/Documents/git/testing-python-exercise-wt2425
-collected 5 items
+collected 3 items
 
-tests/integration/test_diffusion2d.py ..                                 [ 40%]
 tests/unit/test_diffusion2d_functions.py .F.                             [100%]
 
 =================================== FAILURES ===================================
 _____________________ test_initialize_physical_parameters ______________________
 
-solver = <diffusion2d.SolveDiffusion2D object at 0x7f68172d28a0>
+solver = <diffusion2d.SolveDiffusion2D object at 0x7f330e6329c0>
 
     def test_initialize_physical_parameters(solver):
         """
@@ -92,11 +63,12 @@ solver = <diffusion2d.SolveDiffusion2D object at 0x7f68172d28a0>
         d = 4.
         T_cold = 300.
         T_hot = 700.
-        w = 20.
-        h = 30.
-        dx = 0.5
-        dy = 0.5
-        solver.initialize_domain(w, h, dx, dy)
+        solver.w = 20.
+        solver.h = 30.
+        solver.dx = 0.5
+        solver.dy = 0.5
+        solver.nx = 40.
+        solver.ny = 60.
         solver.initialize_physical_parameters(d, T_cold, T_hot)
         assert solver.D == pytest.approx(d, abs=0.01)
         assert solver.T_cold == pytest.approx(T_cold, abs=0.01)
@@ -108,12 +80,12 @@ E         comparison failed
 E         Obtained: 0.0078125
 E         Expected: 0.015 ± 1.0e-03
 
-tests/unit/test_diffusion2d_functions.py:44: AssertionError
+tests/unit/test_diffusion2d_functions.py:48: AssertionError
 ----------------------------- Captured stdout call -----------------------------
 dt = 0.0078125
 =========================== short test summary info ============================
-FAILED tests/unit/test_diffusion2d_functions.py::test_initialize_physical_parameters
-========================= 1 failed, 4 passed in 0.75s ==========================
+FAILED tests/unit/test_diffusion2d_functions.py::test_initialize_physical_parameters - assert 0.0078125 == 0.015 ± 1.0e-03
+========================= 1 failed, 2 passed in 0.41s ==========================
 ```
 
 Initialization with T_hot instead of T_cold:
