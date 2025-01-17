@@ -10,9 +10,8 @@ Please follow the instructions in [python_testing_exercise.md](https://github.co
 ============================= test session starts ==============================
 platform linux -- Python 3.12.8, pytest-8.3.3, pluggy-1.5.0
 rootdir: /home/julian/Documents/git/testing-python-exercise-wt2425
-collected 5 items
+collected 3 items
 
-tests/integration/test_diffusion2d.py ..                                 [ 40%]
 tests/unit/test_diffusion2d_functions.py F.F                             [100%]
 
 =================================== FAILURES ===================================
@@ -176,6 +175,112 @@ tests/unit/test_diffusion2d_functions.py:70: AssertionError
 ================= short test summary info =================
 FAILED tests/unit/test_diffusion2d_functions.py::test_set_initial_condition - assert False
 =============== 1 failed, 2 passed in 0.41s ===============
+```
+
+#### Integration tests
+
+Changed factor `2` to `4` in formula: `self.dt = dx2 * dy2 / (4 * self.D * (dx2 + dy2))`
+
+```
+======================= test session starts =======================
+platform linux -- Python 3.12.8, pytest-8.3.3, pluggy-1.5.0
+rootdir: /home/julian/Documents/git/testing-python-exercise-wt2425
+collected 2 items
+
+tests/integration/test_diffusion2d.py F.                    [100%]
+
+============================ FAILURES =============================
+_______________ test_initialize_physical_parameters _______________
+
+solver = <diffusion2d.SolveDiffusion2D object at 0x7effe4712270>
+
+    def test_initialize_physical_parameters(solver):
+        """
+        Checks function SolveDiffusion2D.initialize_domain
+        """
+        d = 4.0
+        T_cold = 300.0
+        T_hot = 700.0
+        w = 20.0
+        h = 30.0
+        dx = 0.5
+        dy = 0.5
+        solver.initialize_domain(w, h, dx, dy)
+        solver.initialize_physical_parameters(d, T_cold, T_hot)
+        assert solver.D == pytest.approx(d, abs=0.001)
+        assert solver.T_cold == pytest.approx(T_cold, abs=0.001)
+        assert solver.T_hot == pytest.approx(T_hot, abs=0.001)
+>       assert solver.dt == pytest.approx(0.015, abs=0.001)
+E       assert 0.0078125 == 0.015 ± 1.0e-03
+E
+E         comparison failed
+E         Obtained: 0.0078125
+E         Expected: 0.015 ± 1.0e-03
+
+tests/integration/test_diffusion2d.py:31: AssertionError
+---------------------- Captured stdout call -----------------------
+dt = 0.0078125
+===================== short test summary info =====================
+FAILED tests/integration/test_diffusion2d.py::test_initialize_physical_parameters - assert 0.0078125 == 0.015 ± 1.0e-03
+=================== 1 failed, 1 passed in 0.42s ===================
+```
+
+Initialization with T_hot instead of T_cold:
+
+```
+======================= test session starts =======================
+platform linux -- Python 3.12.8, pytest-8.3.3, pluggy-1.5.0
+rootdir: /home/julian/Documents/git/testing-python-exercise-wt2425
+collected 2 items
+
+tests/integration/test_diffusion2d.py .F                    [100%]
+
+============================ FAILURES =============================
+___________________ test_set_initial_condition ____________________
+
+solver = <diffusion2d.SolveDiffusion2D object at 0x7f60be3edf40>
+
+    def test_set_initial_condition(solver):
+        """
+        Checks function SolveDiffusion2D.get_initial_function
+        """
+        d = 4.0
+        T_cold = 300.0
+        T_hot = 700.0
+        w = 2.0
+        h = 3.0
+        dx = 0.5
+        dy = 0.5
+        solver.initialize_domain(w, h, dx, dy)
+        solver.initialize_physical_parameters(d, T_cold, T_hot)
+        u = solver.set_initial_condition()
+        assert u.shape == (4, 6)
+        # numpy.allclose allows an absolute tolerance of 1e-03, 3 places in this configuration.
+>       assert numpy.allclose(
+            a=u,
+            b=numpy.array(
+                [
+                    [300.0, 300.0, 300.0, 300.0, 300.0, 300.0],
+                    [300.0, 300.0, 300.0, 300.0, 300.0, 300.0],
+                    [300.0, 300.0, 300.0, 300.0, 300.0, 300.0],
+                    [300.0, 300.0, 300.0, 300.0, 300.0, 300.0],
+                ]
+            ),
+            atol=1e-03,
+            rtol=0,
+        )
+E       assert False
+E        +  where False = <function allclose at 0x7f608bb301f0>(a=array([[700., 700., 700., 700., 700., 700.],\n       [700., 700., 700., 700., 700., 700.],\n       [700., 700., 700., 700., 700., 700.],\n       [700., 700., 700., 700., 700., 700.]]), b=array([[300., 300., 300., 300., 300., 300.],\n       [300., 300., 300., 300., 300., 300.],\n       [300., 300., 300., 300., 300., 300.],\n       [300., 300., 300., 300., 300., 300.]]), atol=0.001, rtol=0)
+E        +    where <function allclose at 0x7f608bb301f0> = numpy.allclose
+E        +    and   array([[300., 300., 300., 300., 300., 300.],\n       [300., 300., 300., 300., 300., 300.],\n       [300., 300., 300., 300., 300., 300.],\n       [300., 300., 300., 300., 300., 300.]]) = <built-in function array>([[300.0, 300.0, 300.0, 300.0, 300.0, 300.0], [300.0, 300.0, 300.0, 300.0, 300.0, 300.0], [300.0, 300.0, 300.0, 300.0, 300.0, 300.0], [300.0, 300.0, 300.0, 300.0, 300.0, 300.0]])
+E        +      where <built-in function array> = numpy.array
+
+tests/integration/test_diffusion2d.py:52: AssertionError
+---------------------- Captured stdout call -----------------------
+dt = 0.015625
+===================== short test summary info =====================
+FAILED tests/integration/test_diffusion2d.py::test_set_initial_condition - assert False
+=================== 1 failed, 1 passed in 0.41s ===================
 ```
 
 ### unittest log
