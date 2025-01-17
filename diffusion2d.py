@@ -66,7 +66,7 @@ class SolveDiffusion2D:
         print("dt = {}".format(self.dt))
 
     def set_initial_condition(self):
-        u = self.T_hot * np.ones((self.nx, self.ny))
+        u = self.T_cold * np.ones((self.nx, self.ny))
 
         # Initial conditions - circle of radius r centred at (cx,cy) (mm)
         r, cx, cy = 2, 5, 5
