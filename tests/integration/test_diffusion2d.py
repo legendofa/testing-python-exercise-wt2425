@@ -47,5 +47,4 @@ def test_set_initial_condition(solver):
     assert u.shape == (40, 60)
     for x in range(40):
         for y in range(60):
-            print(x, y)
             assert u[x, y] == pytest.approx(300., abs=0.01)
