@@ -178,6 +178,60 @@ FAILED tests/unit/test_diffusion2d_functions.py::test_set_initial_condition
 
 ### unittest log
 
+Modifications similar to pytest logs.
+
+```
+======================================================================
+FAIL: test_initialize_domain (tests.unit.test_diffusion2d_functions.TestDiffusion2D.test_initialize_domain)
+Check function SolveDiffusion2D.initialize_domain
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/julian/Documents/git/testing-python-exercise-wt2425/tests/unit/test_diffusion2d_functions.py", line 29, in test_initialize_domain
+    self.assertAlmostEqual(self.solver.nx, 40, places=3)
+AssertionError: 60 != 40 within 3 places (20 difference)
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.001s
+
+FAILED (failures=1)
+```
+
+```
+======================================================================
+FAIL: test_initialize_physical_parameters (tests.unit.test_diffusion2d_functions.TestDiffusion2D.test_initialize_physical_parameters)
+Checks function SolveDiffusion2D.initialize_physical_parameters
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/julian/Documents/git/testing-python-exercise-wt2425/tests/unit/test_diffusion2d_functions.py", line 51, in test_initialize_physical_parameters
+    self.assertAlmostEqual(self.solver.dt, 0.016, places=3)
+AssertionError: 0.0078125 != 0.016 within 3 places (0.0081875 difference)
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.001s
+
+FAILED (failures=1)
+```
+
+```
+======================================================================
+FAIL: test_set_initial_condition (tests.unit.test_diffusion2d_functions.TestDiffusion2D.test_set_initial_condition)
+Checks function SolveDiffusion2D.set_initial_condition
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/julian/Documents/git/testing-python-exercise-wt2425/tests/unit/test_diffusion2d_functions.py", line 70, in test_set_initial_condition
+    self.assertTrue(numpy.allclose(a=u,
+AssertionError: False is not true
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.001s
+
+FAILED (failures=1)
+```
+
 ## Citing
 
 The code used in this exercise is based on [Chapter 7 of the book "Learning Scientific Programming with Python"](https://scipython.com/book/chapter-7-matplotlib/examples/the-two-dimensional-diffusion-equation/).
+
+```
+
+```
