@@ -307,6 +307,10 @@ Ran 3 tests in 0.001s
 FAILED (failures=1)
 ```
 
+## Coverage
+
+I have used the flag: `coverage run --omit="*/site-packages/*"` to exclude dependencies like numpy in the coverage report.
+
 ## Citing
 
 The code used in this exercise is based on [Chapter 7 of the book "Learning Scientific Programming with Python"](https://scipython.com/book/chapter-7-matplotlib/examples/the-two-dimensional-diffusion-equation/).
